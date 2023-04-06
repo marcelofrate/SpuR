@@ -1,0 +1,592 @@
+options:
+  parameters:
+    author: Frate, M.
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: In search of solutions for the problems related to Radio Frequency
+      Identification (RFID) and the development of new technologies and applications
+      with chipless RFID tags, this article presents the development of an RFID tag
+      reading system based on Software-Defined Radio. SpuR proposes the spectral signature
+      reading method for chipless tags, using low cost hardware and operating in a
+      wide frequency range, it is capable of reading different types of chipless tags
+      and correctly identify them from a previous database stored.
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: SpuR_Reader
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: SpuR - A system for spectral signature recognition of chipless RFID tags
+      using Software-Defined Radio
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: amplitude
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: 2,1,1,1
+    label: Amplitude
+    type: int
+    value: fun_prob
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [182, 8]
+    rotation: 0
+    state: enabled
+- name: freqc
+  id: variable
+  parameters:
+    comment: ''
+    value: python_mod.sweeper(fun_prob)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [429, 8]
+    rotation: 0
+    state: true
+- name: frequency
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: 2,0,1,1
+    label: Frequency
+    type: real
+    value: freqc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [298, 8]
+    rotation: 0
+    state: enabled
+- name: fun_prob
+  id: variable_function_probe
+  parameters:
+    block_id: probSign
+    comment: ''
+    function_args: ''
+    function_name: level
+    poll_rate: '1000'
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [515, 8]
+    rotation: 0
+    state: true
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '25000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [43, 124]
+    rotation: 0
+    state: enabled
+- name: analog_sig_source_x_0_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '6'
+    comment: ''
+    freq: '0.001'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: float
+    waveform: analog.GR_CONST_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [180, 145]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_squared_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [227, 334]
+    rotation: 0
+    state: true
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '500000'
+    max_iter: '4000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '0.000002'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 418]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [466, 329]
+    rotation: 0
+    state: true
+- name: blocks_nlog10_ff_0
+  id: blocks_nlog10_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: '10'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [579, 430]
+    rotation: 0
+    state: true
+- name: hilbert_fc_0_0_0_0
+  id: hilbert_fc
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_taps: '64'
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [435, 132]
+    rotation: 0
+    state: enabled
+- name: iio_pluto_sink_0_0
+  id: iio_pluto_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    attenuation1: '10'
+    bandwidth: '20000000'
+    buffer_size: '32768'
+    comment: ''
+    cyclic: 'True'
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: freqc
+    fstop: '0'
+    len_tag_key: ''
+    samplerate: '520834'
+    type: fc32
+    uri: ip:192.168.2.1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [636, 126]
+    rotation: 0
+    state: enabled
+- name: iio_pluto_source_0_0_0_0
+  id: iio_pluto_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: '20000000'
+    bbdc: 'False'
+    buffer_size: '32768'
+    comment: ''
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: freqc
+    fstop: '0'
+    gain1: '''manual'''
+    len_tag_key: packet_len
+    manual_gain1: '10'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quadrature: 'False'
+    rfdc: 'False'
+    samplerate: '520834'
+    type: fc32
+    uri: ip:192.168.2.1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [19, 314]
+    rotation: 0
+    state: enabled
+- name: probSign
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [669, 327]
+    rotation: 0
+    state: true
+- name: python_mod
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: "#SpuR - An Spectral Signature Writer System in Chipless Tags Using\
+      \ Software Defined Radio (SDR)\n#Reader - Module\nimport matplotlib.pyplot as\
+      \ plt\nfrom matplotlib.widgets import Cursor\nimport numpy as np\nimport pandas\
+      \ as pd\nimport sys\nfrom tkinter import *\nfrom tkinter import messagebox\n\
+      \nf1 =    70000000\nf2 =  6000000000\nstep =   1000000\nf = f1\ntag=1\namp=0\n\
+      result=[]\nmag=[]\nfreq=[]\n\ndef figuraDupla(tag,freq1, mag1, freq2, mag2):\n\
+      \    fig = plt.figure(figsize=(10, 7))\n    # Adding the axes to the figure\n\
+      \    ax = fig.add_axes([0.1, 0.1, 0.85, 0.85])\n    # plotting 1st dataset to\
+      \ the figure\n    xFtemp = np.array(freq1)\n    xF = np.array(freq2)\n    yFtemp\
+      \ = np.array(mag1)\n    yF = np.array(mag2)\n    ax1 = ax.plot(xFtemp, yFtemp)\n\
+      \    # plotting 2nd dataset to the figure\n    ax2 = ax.plot(xF, yF)\n\n   \
+      \ # Setting Title\n    ax.set_title(\"Tag Identificada N\xBA = \"+tag)\n\n \
+      \   # Setting Label\n    ax.set_xlabel(\"X-Axis\")\n    ax.set_ylabel(\"Y-Axis\"\
+      )\n\n    # Adding Legend\n    ax.legend(labels=('BD', 'Tag lida, N\xBA: '+tag))\n\
+      \    # cursor\n    ax.set_xlabel('Frequency (MHz)')\n    ax.set_ylabel('Magnitude\
+      \ (dBm)')\n    cursor = Cursor(ax, color='green', linewidth=1.2)\n    plt.ylim(-45,\
+      \ 0)\n    plt.xlim(0, 6000)\n    plt.grid()\n    plt.savefig('/mnt/d/SpuR/BD/Tag_Read_'+str(tag)+'.png',\
+      \ transparent=False)\n    plt.show()\n    \ndef figura(freq, mag):\n\txF = np.array(freq)\n\
+      \tyM = np.array(mag)\n\tfig = plt.figure(figsize=(10, 7))\n\tax = fig.add_axes([0.1,\
+      \ 0.1, 0.85, 0.85])\n\tax.plot(xF, yM)\n\tplt.xticks(rotation=45)\n\tax.set_xlabel('Frequency\
+      \ (MHz)')\n\tax.set_ylabel('Magnitude')\n\tplt.title('Chipless RFID Reader')\n\
+      \tcursor = Cursor(ax, color='green', linewidth=1.2)\n\tplt.ylim(-45, 0)\n\t\
+      plt.xlim(1000, 6000)\n\tplt.grid()\n\tplt.show()\n\ndef expDados(freq, mag):\n\
+      \trfidSet = pd.DataFrame({'Freq': freq, 'Mag': mag})\n\trfidSet.to_csv('/mnt/d/SpuR/BD/Tag_Read_'+str(tag)+'.csv',\
+      \ index = False)\t\n\ndef calcEuc(magT, mag):\n    xTemp = np.array(magT)\n\
+      \    xTag = np.array(mag)\n    distE = np.linalg.norm(xTemp - xTag)\n    return(distE)\n\
+      \    \ndef compTag(tagF,tagM):\n\trfidTemp = pd.read_csv(\"/mnt/d/SpuR/BD/BD.csv\"\
+      )\n\t\n\t#Loop\n#\ttag0M = rfidTemp['Cod'] == 0\n#\ttag0M = rfidTemp[tag0M]\n\
+      #\ttag0M = tag0M['Mag']\n#\ttag0F = rfidTemp['Cod'] == 0\n#\ttag0F = rfidTemp[tag0F]\n\
+      #\ttag0F = tag0F['Freq']\n\t\n\t#Tag1\n\ttag1M = rfidTemp['Cod'] == 1\n\ttag1M\
+      \ = rfidTemp[tag1M]\n\ttag1M = tag1M['Mag']\n\ttag1F = rfidTemp['Cod'] == 1\n\
+      \ttag1F = rfidTemp[tag1F]\n\ttag1F = tag1F['Freq']\n\t\n\t#Tag2\n\ttag2M = rfidTemp['Cod']\
+      \ == 2\n\ttag2M = rfidTemp[tag2M]\n\ttag2M = tag2M['Mag']\n\ttag2F = rfidTemp['Cod']\
+      \ == 2\n\ttag2F = rfidTemp[tag2F]\n\ttag2F = tag2F['Freq']\n\n\t#Tag3\n\ttag3M\
+      \ = rfidTemp['Cod'] == 3\n\ttag3M = rfidTemp[tag3M]\n\ttag3M = tag3M['Mag']\n\
+      \ttag3F = rfidTemp['Cod'] == 3\n\ttag3F = rfidTemp[tag3F]\n\ttag3F = tag3F['Freq']\n\
+      \t\n\t#Tag4\n\ttag4M = rfidTemp['Cod'] == 4\n\ttag4M = rfidTemp[tag4M]\n\ttag4M\
+      \ = tag4M['Mag']\n\ttag4F = rfidTemp['Cod'] == 4\n\ttag4F = rfidTemp[tag4F]\n\
+      \ttag4F = tag4F['Freq']\n\t\n\t#Tag5\n#\ttag5M = rfidTemp['Cod'] == 5\n#\ttag5M\
+      \ = rfidTemp[tag5M]\n#\ttag5M = tag5M['Mag']\n#\ttag5F = rfidTemp['Cod'] ==\
+      \ 5\n#\ttag5F = rfidTemp[tag5F]\n#\ttag5F = tag5F['Freq']\n\n\t#Tag6\n#\ttag6M\
+      \ = rfidTemp['Cod'] == 6\n#\ttag6M = rfidTemp[tag6M]\n#\ttag6M = tag6M['Mag']\n\
+      #\ttag6F = rfidTemp['Cod'] == 6\n#\ttag6F = rfidTemp[tag6F]\n#\ttag6F = tag6F['Freq']\n\
+      \t\n\t\n\t\n\t#Calcula Dist\xE2ncia Euclediana\n#\tx0 = calcEuc(tag0M, tagM)\n\
+      \tx1 = calcEuc(tag1M, tagM)\n\tx2 = calcEuc(tag2M, tagM)\n\tx3 = calcEuc(tag3M,\
+      \ tagM)\n\tx4 = calcEuc(tag4M, tagM)\n#\tx5 = calcEuc(tag5M, tagM)\n#\tx6 =\
+      \ calcEuc(tag6M, tagM)\n\t\n\t\n\t\n#Verifica qual \xE9 a etiqueta\n\tif (x1\
+      \ < x2) and (x1 < x3) and (x1 < x4):\n\t\ttag = \"1\"\n\t\tfiguraDupla(tag,\
+      \ tag1F, tag1M, tagF, tagM)\n\telif (x2 < x1) and (x2 < x3) and (x2 < x4):\n\
+      \t\ttag = \"2\"\n\t\tfiguraDupla(tag, tag2F, tag2M, tagF, tagM)\n\telif (x3\
+      \ < x1) and (x3 < x2) and (x3 < x4):\n\t\ttag = \"3\"\n\t\tfiguraDupla(tag,\
+      \ tag3F, tag3M, tagF, tagM)\n\telif (x4 < x1) and (x4 < x2) and (x4 < x3):\n\
+      \t\ttag = \"4\"\n\t\tfiguraDupla(tag, tag4F, tag4M, tagF, tagM)\n\t\n\t\n\t\n\
+      \t\n\t\n\n#\tif (x0 < x1) and (x0 < x2) and (x0 < x3) and (x0 < x4) and (x0\
+      \ < x5) and (x0 < x6):\n#\t\ttag = \"0\"\n#\t\tfiguraDupla(tag, tag0F, tag0M,\
+      \ tagF, tagM)\n#\telif (x1 < x0) and (x1 < x2) and (x1 < x3) and (x1 < x4) and\
+      \ (x1 < x5) and (x1 < x6):\n#\t\ttag = \"1\"\n#\t\tfiguraDupla(tag, tag1F, tag1M,\
+      \ tagF, tagM)\n#\telif (x2 < x0) and (x2 < x1) and (x2 < x3) and (x2 < x4) and\
+      \ (x2 < x5) and (x2 < x6):\n#\t\ttag = \"2\"\n#\t\tfiguraDupla(tag, tag2F, tag2M,\
+      \ tagF, tagM)\n#\telif (x3 < x0) and (x3 < x1) and (x3 < x2) and (x3 < x4) and\
+      \ (x3 < x5) and (x3 < x6):\n#\t\ttag = \"3\"\n#\t\tfiguraDupla(tag, tag3F, tag3M,\
+      \ tagF, tagM)\n#\telif (x4 < x0) and (x4 < x1) and (x4 < x2) and (x4 < x3) and\
+      \ (x4 < x5) and (x4 < x6):\n#\t\ttag = \"4\"\n#\t\tfiguraDupla(tag, tag4F, tag4M,\
+      \ tagF, tagM)\n#\telif (x5 < x0) and (x5 < x1) and (x5 < x2) and (x5 < x3) and\
+      \ (x5 < x4) and (x5 < x6):\n#\t\ttag = \"5\"\n#\t\tfiguraDupla(tag, tag5F, tag5M,\
+      \ tagF, tagM)\n#\telif (x6 < x0) and (x6 < x1) and (x6 < x2) and (x6 < x3) and\
+      \ (x6 < x4) and (x6 < x5):\n#\t\ttag = \"6\"\n#\t\tfiguraDupla(tag, tag6F, tag6M,\
+      \ tagF, tagM)\n\n\t\ndef truncate(num, n):\n    integer = int(num * (10**n))/(10**n)\n\
+      \    return float(integer)\n\ndef sweeper(prob_lvl):\n\tglobal f1, f2, f, step,\
+      \ result, amp, mag, freq\n\tif prob_lvl:\n\t\tamp = (prob_lvl)\n\t\tresult.append({f,\
+      \ amp})\n\t\tmagR=truncate(amp, 4)\n\t\tmag.append(magR)\n\t\tfreq.append(int(f/1000000))\n\
+      \t\tf +=step\n\t\tamp = 0\n\tif f> f2:\n\t\txF=np.array(freq)\n\t\tyM=np.array(mag)\n\
+      \t\tcompTag(freq, mag)\n\t\tf=f1\n\t\tprint(\"Tag N\xBA \",tag)\n\t\texpDados(xF,\
+      \ yM)\n\t\tfreq=[]\n\t\tmag=[]\n\t\tresult=[]\n\treturn f\n"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [654, 8]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'False'
+    grid: 'True'
+    gui_hint: 4,0,1,1
+    label1: TX - Signal
+    label10: Signal 10
+    label2: ''
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '14'
+    ymin: '-0'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [435, 209]
+    rotation: 0
+    state: true
+- name: qtgui_time_sink_x_1
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: 4,1,1,1
+    label1: RX - Signal
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '20'
+    ymin: '-20'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 442]
+    rotation: 0
+    state: true
+
+connections:
+- [analog_sig_source_x_0_0, '0', hilbert_fc_0_0_0_0, '0']
+- [analog_sig_source_x_0_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', blocks_moving_average_xx_0, '0']
+- [blocks_moving_average_xx_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_nlog10_ff_0, '0']
+- [blocks_nlog10_ff_0, '0', probSign, '0']
+- [blocks_nlog10_ff_0, '0', qtgui_time_sink_x_1, '0']
+- [hilbert_fc_0_0_0_0, '0', iio_pluto_sink_0_0, '0']
+- [iio_pluto_source_0_0_0_0, '0', blocks_complex_to_mag_squared_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.4.0
