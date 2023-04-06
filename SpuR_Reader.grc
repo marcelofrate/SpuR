@@ -316,17 +316,17 @@ blocks:
       )\n\n    # Adding Legend\n    ax.legend(labels=('BD', 'Tag lida, N\xBA: '+tag))\n\
       \    # cursor\n    ax.set_xlabel('Frequency (MHz)')\n    ax.set_ylabel('Magnitude\
       \ (dBm)')\n    cursor = Cursor(ax, color='green', linewidth=1.2)\n    plt.ylim(-45,\
-      \ 0)\n    plt.xlim(0, 6000)\n    plt.grid()\n    plt.savefig('/mnt/d/SpuR/BD/Tag_Read_'+str(tag)+'.png',\
+      \ 0)\n    plt.xlim(0, 6000)\n    plt.grid()\n    plt.savefig('/mnt/d/SpuR/Tag_Read_'+str(tag)+'.png',\
       \ transparent=False)\n    plt.show()\n    \ndef figura(freq, mag):\n\txF = np.array(freq)\n\
       \tyM = np.array(mag)\n\tfig = plt.figure(figsize=(10, 7))\n\tax = fig.add_axes([0.1,\
       \ 0.1, 0.85, 0.85])\n\tax.plot(xF, yM)\n\tplt.xticks(rotation=45)\n\tax.set_xlabel('Frequency\
       \ (MHz)')\n\tax.set_ylabel('Magnitude')\n\tplt.title('Chipless RFID Reader')\n\
       \tcursor = Cursor(ax, color='green', linewidth=1.2)\n\tplt.ylim(-45, 0)\n\t\
       plt.xlim(1000, 6000)\n\tplt.grid()\n\tplt.show()\n\ndef expDados(freq, mag):\n\
-      \trfidSet = pd.DataFrame({'Freq': freq, 'Mag': mag})\n\trfidSet.to_csv('/mnt/d/SpuR/BD/Tag_Read_'+str(tag)+'.csv',\
+      \trfidSet = pd.DataFrame({'Freq': freq, 'Mag': mag})\n\trfidSet.to_csv('/mnt/d/SpuR/Tag_Read_'+str(tag)+'.csv',\
       \ index = False)\t\n\ndef calcEuc(magT, mag):\n    xTemp = np.array(magT)\n\
       \    xTag = np.array(mag)\n    distE = np.linalg.norm(xTemp - xTag)\n    return(distE)\n\
-      \    \ndef compTag(tagF,tagM):\n\trfidTemp = pd.read_csv(\"/mnt/d/SpuR/BD/BD.csv\"\
+      \    \ndef compTag(tagF,tagM):\n\trfidTemp = pd.read_csv(\"/mnt/d/SpuR/BD.csv\"\
       )\n\t\n\t#Loop\n#\ttag0M = rfidTemp['Cod'] == 0\n#\ttag0M = rfidTemp[tag0M]\n\
       #\ttag0M = tag0M['Mag']\n#\ttag0F = rfidTemp['Cod'] == 0\n#\ttag0F = rfidTemp[tag0F]\n\
       #\ttag0F = tag0F['Freq']\n\t\n\t#Tag1\n\ttag1M = rfidTemp['Cod'] == 1\n\ttag1M\
