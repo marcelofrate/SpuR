@@ -4,3 +4,6 @@ In search of solutions for the problems related to Radio Frequency Identificatio
 
 Watch the video, in Spanish, with the abstract of the article presented to IEEE Latin America Transactions at: https://youtu.be/MPiLj2VarhA
 ![Abstract](https://github.com/marcelofrate/SpuR/assets/4600381/7d7169ee-1233-4bcb-80e9-8cd572e31a39)
+
+For more information, access the full article at: 
+https://latamt.ieeer9.org/index.php/transactions/article/view/8131
